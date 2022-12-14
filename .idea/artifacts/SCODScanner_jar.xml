@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="SCOD_reader:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/SCOD_reader_jar</output-path>
+  <artifact type="jar" name="SCODScanner:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/SCODScanner_jar</output-path>
     <root id="archive" name="DemoFX.jar">
       <element id="module-output" name="DemoFX" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-graphics/19-ea+7/javafx-graphics-19-ea+7-win.jar" path-in-jar="/" />

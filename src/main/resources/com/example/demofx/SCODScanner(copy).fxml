@@ -34,11 +34,9 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
@@ -67,34 +65,32 @@
         <padding>
             <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
         </padding>
-        <VBox prefHeight="200.0" prefWidth="775.0" HBox.hgrow="ALWAYS">
-            <HBox VBox.vgrow="ALWAYS">
-                <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                    <Image url="@../../../img/BS2_Kazakstan.jpg" />
-                </ImageView>
-                <GridPane prefHeight="290.0" prefWidth="678.0" HBox.hgrow="ALWAYS">
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                    <TableView fx:id="scodTable" editable="true" onKeyPressed="#openLogFile" onMouseClicked="#openLogFile" prefHeight="300.0" prefWidth="362.0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
-                        <columns>
-                            <!-- Колонки таблицы -->
-                            <TableColumn fx:id="idColumn" maxWidth="1.7976931348623157E308" minWidth="135.0" prefWidth="-1.0" text="Id" />
-                            <TableColumn fx:id="dateColumn" maxWidth="1.7976931348623157E308" minWidth="135.0" prefWidth="-1.0" text="Date" />
-                            <TableColumn fx:id="cashIn" maxWidth="1.7976931348623157E308" minWidth="135.0" prefWidth="-1.0" text="Cash-In" />
-                            <TableColumn fx:id="cashOut" maxWidth="1.7976931348623157E308" minWidth="135.0" prefWidth="-1.0" text="Cash-Out" />
-                            <TableColumn fx:id="groupColumn" maxWidth="1.7976931348623157E308" minWidth="135.0" prefWidth="-1.0" text="Group" />
-                        </columns>
-                    </TableView>
-                </GridPane>
-            </HBox>
-            <ScrollPane fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS">
-                <ListView fx:id="logFileListView" prefHeight="200.0" prefWidth="200.0" />
-            </ScrollPane>
+        <VBox style="-fx-background-color: #FFFFFF;">
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                <Image url="@../../../img/BS2_Kazakstan.jpg" />
+            </ImageView>
         </VBox>
+      <GridPane>
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+                <TableView fx:id="scodTable" editable="true" onMouseClicked="#openLogFile" prefHeight="546.0" prefWidth="693.0">
+                    <columns>
+                        <!-- Колонки таблицы -->
+                        <TableColumn fx:id="idColumn" maxWidth="-1.0" minWidth="113.0" prefWidth="-1.0" text="Id" />
+                        <TableColumn fx:id="numberColumn" maxWidth="-1.0" minWidth="113.0" prefWidth="-1.0" text="Number" />
+                        <TableColumn fx:id="groupColumn" maxWidth="-1.0" minWidth="113.0" prefWidth="-1.0" text="Group" />
+                        <TableColumn fx:id="lineColumn" maxWidth="-1.0" minWidth="113.0" prefWidth="-1.0" text="Line" />
+                        <TableColumn fx:id="dateColumn" maxWidth="-1.0" minWidth="113.0" prefWidth="-1.0" text="Date" />
+                        <TableColumn fx:id="typeColumn" maxWidth="-1.0" minWidth="113.0" prefWidth="-1.0" text="Type" />
+                    </columns>
+                </TableView>
+         </children>
+      </GridPane>
     </HBox>
     <HBox alignment="BOTTOM_LEFT" spacing="5.0" style="-fx-background-color: #F0F0F0;" VBox.vgrow="NEVER">
         <padding>
