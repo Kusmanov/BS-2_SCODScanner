@@ -92,7 +92,7 @@
                 </GridPane>
             </HBox>
             <ScrollPane fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS">
-                <ListView fx:id="logFileListView" prefHeight="200.0" prefWidth="200.0" />
+                <ListView fx:id="logFileListView" />
             </ScrollPane>
         </VBox>
     </HBox>

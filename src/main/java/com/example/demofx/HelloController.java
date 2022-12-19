@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.DirectoryChooser;
@@ -22,8 +23,8 @@ import java.util.regex.Pattern;
 
 public class HelloController {
     private final ObservableList<Scod> scodOL = FXCollections.observableArrayList();
-    private int scodId = 1;
-    private int scodLineNumber = 1;
+    private int scodIdCount = 1;
+    private int scodLineNumberCount = 1;
 
     @FXML
     private TableView<Scod> scodTable;
@@ -67,10 +68,10 @@ public class HelloController {
                                 addToObservableListNewScod("Cash-out", path, currentLine);
                             }
                             // увеличиваем счетчик номера строки
-                            scodLineNumber++;
+                            scodLineNumberCount++;
                         }
                         // сбрасываем счетчик номера строки
-                        scodLineNumber = 1;
+                        scodLineNumberCount = 1;
                     } catch (IOException e) {
                         System.out.println("Handle file I/O exception");
                     }
@@ -85,6 +86,45 @@ public class HelloController {
         groupColumn.setCellValueFactory(new PropertyValueFactory<>("group"));
 
         scodTable.setItems(scodOL);
+
+//        TableColumn<Scod, String> tc = (TableColumn<Scod, String>) scodTable.getColumns().get(4);
+//        tc.setCellFactory(column -> new TableCell<>() {
+//            @Override
+//            protected void updateItem(String item, boolean empty) {
+//                super.updateItem(item, empty);
+//
+//                if (item == null || empty) {
+//                    setStyle("");
+//                } else {
+//                    // Style all dates in March with a different color.
+//                    if (item.equals("CRITICAL")) {
+//                        setStyle("-fx-background-color: yellow");
+//                    } else {
+//                        setStyle("");
+//                    }
+//                }
+//            }
+//        });
+
+        scodTable.setRowFactory((param) -> new TableRow<>() {
+            protected void updateItem(Scod item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (item == null || empty) {
+                    setStyle("");
+                } else {
+                    // Style all dates in March with a different color.
+                    if (Objects.equals(item.getGroup(), "1")) {
+                        setStyle("-fx-background-color: FFE1B3");
+                    } else if (Objects.equals(item.getGroup(), "2")) {
+                        setStyle("-fx-background-color: FFB3B3");
+                    } else {
+                        setStyle("");
+                    }
+                }
+            }
+        });
+
     }
 
     @FXML
@@ -146,24 +186,21 @@ public class HelloController {
             scod = currentLine.substring(start, end);
         }
 
-        String low = "LOW";
-        String high = "HIGH";
-
         if (scod != null) {
             try {
                 int num = Integer.parseInt(scod.substring(5));
                 if (num != 0) {
                     if (num == 9 || num == 12 || num == 14) {
                         if (scodType.equals("Cash-in")) {
-                            addNew(String.valueOf(num), null, date, path, low);
+                            addNew(String.valueOf(num), null, date, path, "1");
                         } else if (scodType.equals("Cash-out")) {
-                            addNew(null, String.valueOf(num), date, path, low);
+                            addNew(null, String.valueOf(num), date, path, "1");
                         }
                     } else {
                         if (scodType.equals("Cash-in")) {
-                            addNew(String.valueOf(num), null, date, path, high);
+                            addNew(String.valueOf(num), null, date, path, "2");
                         } else if (scodType.equals("Cash-out")) {
-                            addNew(null, String.valueOf(num), date, path, high);
+                            addNew(null, String.valueOf(num), date, path, "2");
                         }
                     }
                 }
@@ -174,7 +211,7 @@ public class HelloController {
     }
 
     private void addNew(String cashIn, String cashOut, String date, Path path, String group) {
-        scodOL.add(new Scod(scodId, cashIn, cashOut, scodLineNumber, date, path, group));
-        scodId++;
+        scodOL.add(new Scod(scodIdCount, cashIn, cashOut, scodLineNumberCount, date, path, group));
+        scodIdCount++;
     }
 }
