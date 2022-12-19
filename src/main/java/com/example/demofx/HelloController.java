@@ -91,6 +91,7 @@ public class HelloController {
                 super.updateItem(item, empty);
 
                 if (item == null || empty) {
+                    setText("");
                     setStyle("");
                 } else {
                     if (Objects.equals(item, "1")) {
@@ -106,6 +107,7 @@ public class HelloController {
                                 -fx-border-color: #FFFFFF;
                                 """);
                     } else {
+                        setText("");
                         setStyle("");
                     }
                 }
