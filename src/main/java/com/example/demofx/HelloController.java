@@ -94,13 +94,13 @@ public class HelloController {
                     setStyle("");
                 } else {
                     if (Objects.equals(item, "1")) {
-                        setText("1");
+                        setText("medium");
                         setStyle("""
                                 -fx-background-color: #FFE1B3;
                                 -fx-border-color: #FFFFFF;
                                 """);
                     } else if (Objects.equals(item, "2")) {
-                        setText("2");
+                        setText("high");
                         setStyle("""
                                 -fx-background-color: #FFB3B3;
                                 -fx-border-color: #FFFFFF;
