@@ -3,10 +3,7 @@ package com.example.demofx;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
@@ -87,42 +84,53 @@ public class HelloController {
 
         scodTable.setItems(scodOL);
 
-//        TableColumn<Scod, String> tc = (TableColumn<Scod, String>) scodTable.getColumns().get(4);
-//        tc.setCellFactory(column -> new TableCell<>() {
-//            @Override
-//            protected void updateItem(String item, boolean empty) {
-//                super.updateItem(item, empty);
-//
-//                if (item == null || empty) {
-//                    setStyle("");
-//                } else {
-//                    // Style all dates in March with a different color.
-//                    if (item.equals("CRITICAL")) {
-//                        setStyle("-fx-background-color: yellow");
-//                    } else {
-//                        setStyle("");
-//                    }
-//                }
-//            }
-//        });
-
-        scodTable.setRowFactory((param) -> new TableRow<>() {
-            protected void updateItem(Scod item, boolean empty) {
+        TableColumn<Scod, String> tc = (TableColumn<Scod, String>) scodTable.getColumns().get(4);
+        tc.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
 
                 if (item == null || empty) {
                     setStyle("");
                 } else {
-                    if (Objects.equals(item.getGroup(), "1")) {
-                        setStyle("-fx-background-color: FFE1B3");
-                    } else if (Objects.equals(item.getGroup(), "2")) {
-                        setStyle("-fx-background-color: FFB3B3");
+                    if (Objects.equals(item, "1")) {
+                        setText("1");
+                        setStyle("""
+                                -fx-background-color: #FFE1B3;
+                                -fx-border-color: #FFFFFF;
+                                """);
+                    } else if (Objects.equals(item, "2")) {
+                        setText("2");
+                        setStyle("""
+                                -fx-background-color: #FFE1B3;
+                                -fx-border-color: #FFFFFF;
+                                """);
                     } else {
                         setStyle("");
                     }
                 }
             }
         });
+
+//        scodTable.setRowFactory((param) -> new TableRow<>() {
+//            protected void updateItem(Scod item, boolean empty) {
+//                super.updateItem(item, empty);
+//
+//                if (item == null || empty) {
+//                    setStyle("");
+//                } else {
+//                    if (Objects.equals(item.getGroup(), "1")) {
+//                        setStyle("-fx-background-color: #FFE1B3;");
+//                    } else if (Objects.equals(item.getGroup(), "2")) {
+//                        setStyle("-fx-background-color: #FFB3B3;");
+//                    } else if (item.) {
+//
+//                    } else {
+//                        setStyle("");
+//                    }
+//                }
+//            }
+//        });
 
     }
 
