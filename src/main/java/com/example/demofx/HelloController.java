@@ -102,7 +102,7 @@ public class HelloController {
                     } else if (Objects.equals(item, "2")) {
                         setText("2");
                         setStyle("""
-                                -fx-background-color: #FFE1B3;
+                                -fx-background-color: #FFB3B3;
                                 -fx-border-color: #FFFFFF;
                                 """);
                     } else {
