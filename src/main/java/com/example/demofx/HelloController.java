@@ -113,7 +113,6 @@ public class HelloController {
                 if (item == null || empty) {
                     setStyle("");
                 } else {
-                    // Style all dates in March with a different color.
                     if (Objects.equals(item.getGroup(), "1")) {
                         setStyle("-fx-background-color: FFE1B3");
                     } else if (Objects.equals(item.getGroup(), "2")) {
