@@ -1,5 +1,8 @@
 package com.example.demofx;
 
+import com.example.demofx.functionality.LogFileOpener;
+import com.example.demofx.functionality.LogFilesScanner;
+import com.example.demofx.objects.Scod;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
@@ -24,10 +27,9 @@ public class HelloController {
     @FXML
     private ListView<String> logFileListView;
 
-
     @FXML
     private void onOpenMenuItemClick() {
-        LogFilesScanner.execute( idColumn, cashInColumn, cashOutColumn, dateColumn, groupColumn, timeColumn, scodTable);
+        LogFilesScanner.execute(idColumn, cashInColumn, cashOutColumn, dateColumn, groupColumn, timeColumn, scodTable);
     }
 
     @FXML

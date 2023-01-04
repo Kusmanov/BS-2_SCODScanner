@@ -1,4 +1,4 @@
-package com.example.demofx;
+package com.example.demofx.objects;
 
 import java.nio.file.Path;
 

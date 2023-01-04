@@ -1,5 +1,6 @@
-package com.example.demofx;
+package com.example.demofx.functionality;
 
+import com.example.demofx.objects.Scod;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
