@@ -56,11 +56,10 @@
     <MenuBar VBox.vgrow="NEVER">
         <Menu mnemonicParsing="false" text="File">
             <MenuItem mnemonicParsing="false" onAction="#onOpenMenuItemClick" text="Open…" />
-            <MenuItem mnemonicParsing="false" text="Save" />
-            <MenuItem mnemonicParsing="false" text="Quit" />
+            <MenuItem mnemonicParsing="false" onAction="#onQuitMenuItemClick" text="Quit" />
         </Menu>
         <Menu mnemonicParsing="false" text="Help">
-            <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
+            <MenuItem mnemonicParsing="false" text="About SCODScanner" />
         </Menu>
     </MenuBar>
     <HBox VBox.vgrow="ALWAYS">
@@ -79,14 +78,15 @@
                     <rowConstraints>
                         <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                     </rowConstraints>
-                    <TableView fx:id="scodTable" editable="true" onKeyPressed="#openLogFile" onMouseClicked="#openLogFile" prefHeight="300.0" prefWidth="362.0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+                    <TableView fx:id="scodTable" editable="true" onKeyPressed="#onTableViewLineClick" onMouseClicked="#onTableViewLineClick" prefHeight="300.0" prefWidth="362.0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
                         <columns>
                             <!-- Колонки таблицы -->
-                            <TableColumn fx:id="idColumn" maxWidth="1.7976931348623157E308" minWidth="135.0" prefWidth="-1.0" text="Id" />
-                            <TableColumn fx:id="dateColumn" maxWidth="1.7976931348623157E308" minWidth="135.0" prefWidth="-1.0" text="Date" />
-                            <TableColumn fx:id="cashIn" maxWidth="1.7976931348623157E308" minWidth="135.0" prefWidth="-1.0" text="Cash-In" />
-                            <TableColumn fx:id="cashOut" maxWidth="1.7976931348623157E308" minWidth="135.0" prefWidth="-1.0" text="Cash-Out" />
-                            <TableColumn fx:id="groupColumn" maxWidth="1.7976931348623157E308" minWidth="135.0" prefWidth="-1.0" text="Group" />
+                            <TableColumn fx:id="idColumn" maxWidth="1.7976931348623157E308" minWidth="70.0" prefWidth="-1.0" text="Id" />
+                            <TableColumn fx:id="dateColumn" maxWidth="1.7976931348623157E308" minWidth="70.0" prefWidth="-1.0" sortable="false" text="Date" />
+                            <TableColumn fx:id="timeColumn" minWidth="70.0" prefWidth="75.0" sortable="false" text="Time" />
+                            <TableColumn fx:id="cashIn" maxWidth="1.7976931348623157E308" minWidth="70.0" prefWidth="-1.0" sortable="false" text="Cash-In" />
+                            <TableColumn fx:id="cashOut" maxWidth="1.7976931348623157E308" minWidth="70.0" prefWidth="-1.0" sortable="false" text="Cash-Out" />
+                            <TableColumn fx:id="groupColumn" maxWidth="1.7976931348623157E308" minWidth="70.0" prefWidth="-1.0" sortable="false" text="Group" />
                         </columns>
                     </TableView>
                 </GridPane>

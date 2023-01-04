@@ -10,8 +10,9 @@ public class Scod {
     private final String date;
     private final Path file;
     private final String group;
+    private final String time;
 
-    public Scod(int id, String cashIn, String cashOut, int line, String date, Path file, String group) {
+    public Scod(int id, String cashIn, String cashOut, int line, String date, Path file, String group, String time) {
         this.id = id;
         this.cashIn = cashIn;
         this.cashOut = cashOut;
@@ -19,6 +20,7 @@ public class Scod {
         this.date = date;
         this.file = file;
         this.group = group;
+        this.time = time;
     }
 
     public int getId() {
@@ -47,5 +49,9 @@ public class Scod {
 
     public String getGroup() {
         return group;
+    }
+
+    public String getTime() {
+        return time;
     }
 }

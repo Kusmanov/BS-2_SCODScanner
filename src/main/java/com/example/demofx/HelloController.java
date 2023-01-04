@@ -1,5 +1,6 @@
 package com.example.demofx;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -20,8 +21,8 @@ import java.util.regex.Pattern;
 
 public class HelloController {
     private final ObservableList<Scod> scodOL = FXCollections.observableArrayList();
-    private int scodIdCount = 1;
-    private int scodLineNumberCount = 1;
+    private int scodIdCount;
+    private int scodLineNumberCount;
 
     @FXML
     private TableView<Scod> scodTable;
@@ -37,9 +38,15 @@ public class HelloController {
     private TableColumn<Scod, String> groupColumn;
     @FXML
     private ListView<String> logFileListView;
+    @FXML
+    private TableColumn<Scod, String> timeColumn;
 
     @FXML
     private void onOpenMenuItemClick() {
+        scodOL.clear();
+        scodIdCount = 1;
+        scodLineNumberCount = 0;
+
         DirectoryChooser directoryChooser = new DirectoryChooser();
         File selectedDirectory = directoryChooser.showDialog(new Stage());
 
@@ -56,19 +63,22 @@ public class HelloController {
                     // читаем с потока данных
                     try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
                         String currentLine;
+                        String previousLine = null;
                         while ((currentLine = reader.readLine()) != null) {
                             // заполняем ObservableList данными из потока
                             if (currentLine.contains("LEN=0179")) {
-                                addToObservableListNewScod("Cash-in", path, currentLine);
+                                addToObservableListNewScod("Cash-in", path, currentLine, previousLine);
                             } else if (currentLine.contains("LEN=0279")
                                     || currentLine.contains("LEN=0250")) {
-                                addToObservableListNewScod("Cash-out", path, currentLine);
+                                addToObservableListNewScod("Cash-out", path, currentLine, previousLine);
                             }
                             // увеличиваем счетчик номера строки
                             scodLineNumberCount++;
+                            // сохраняем строку перед выходом, чтобы использовать как предыдущую
+                            previousLine = currentLine;
                         }
                         // сбрасываем счетчик номера строки
-                        scodLineNumberCount = 1;
+                        scodLineNumberCount = 0;
                     } catch (IOException e) {
                         System.out.println("Handle file I/O exception");
                     }
@@ -77,14 +87,17 @@ public class HelloController {
         }
         // заполняем таблицу данными из ObservableList
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        timeColumn.setCellValueFactory(new PropertyValueFactory<>("time"));
         cashIn.setCellValueFactory(new PropertyValueFactory<>("cashIn"));
         cashOut.setCellValueFactory(new PropertyValueFactory<>("cashOut"));
-        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         groupColumn.setCellValueFactory(new PropertyValueFactory<>("group"));
 
         scodTable.setItems(scodOL);
 
-        TableColumn<Scod, String> tc = (TableColumn<Scod, String>) scodTable.getColumns().get(4);
+        TableColumn<Scod, String> tc;
+        tc = (TableColumn<Scod, String>) scodTable.getColumns().get(5);
+
         tc.setCellFactory(column -> new TableCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -133,11 +146,10 @@ public class HelloController {
 //                }
 //            }
 //        });
-
     }
 
     @FXML
-    private void openLogFile() {
+    private void onTableViewLineClick() {
         TableView.TableViewSelectionModel<Scod> sm = scodTable.getSelectionModel();
         ObservableList<Scod> tableViewOL = sm.getSelectedItems();
         Path path = null;
@@ -145,7 +157,7 @@ public class HelloController {
 
         try {
             path = tableViewOL.get(0).getFile();
-            lineNumber = tableViewOL.get(0).getLine() - 1;
+            lineNumber = tableViewOL.get(0).getLine();
             sm.clearAndSelect(sm.getSelectedIndex());
         } catch (Exception e) {
             sm.clearSelection();
@@ -154,7 +166,7 @@ public class HelloController {
         ObservableList<String> logFileOL = FXCollections.observableArrayList();
 
         try {
-            if (path != null) {
+            if (path != null && lineNumber != 0) {
                 try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
                     String currentLine;
                     while ((currentLine = reader.readLine()) != null) {
@@ -171,6 +183,11 @@ public class HelloController {
         logFileListView.getSelectionModel().select(lineNumber);
     }
 
+    @FXML
+    private void onQuitMenuItemClick() {
+        Platform.exit();
+    }
+
     private boolean isXml(File file) {
         String ex = ".XML";
         int index = file.getName().length() - ex.length();
@@ -179,20 +196,38 @@ public class HelloController {
         return fileEx.toUpperCase().equals(ex);
     }
 
-    private void addToObservableListNewScod(String scodType, Path path, String currentLine) {
+    private void addToObservableListNewScod(String scodType, Path path, String currentLine, String previousLine) {
         String fileName = path.getFileName().toString();
         String yyyy = fileName.substring(0, 4);
         String mm = fileName.substring(4, 6);
         String dd = fileName.substring(6, 8);
         String date = yyyy + "-" + mm + "-" + dd;
 
-        Pattern pattern = Pattern.compile("SCOD=.{2}");
-        Matcher matcher = pattern.matcher(currentLine);
+        Pattern pattern1 = Pattern.compile("SCOD=.{2}");
+        Matcher matcher1 = pattern1.matcher(currentLine);
         String scod = null;
-        while (matcher.find()) {
-            int start = matcher.start();
-            int end = matcher.end();
+        while (matcher1.find()) {
+            int start = matcher1.start();
+            int end = matcher1.end();
             scod = currentLine.substring(start, end);
+        }
+
+        Pattern pattern2 = Pattern.compile("time=\"\\d{2}:\\d{2}:\\d{2}\"");
+        Matcher matcher2 = pattern2.matcher(previousLine);
+        String timeCashIn = null;
+        while (matcher2.find()) {
+            int start = matcher2.start() + 6;
+            int end = matcher2.end() - 1;
+            timeCashIn = previousLine.substring(start, end);
+        }
+
+        Pattern pattern3 = Pattern.compile("time=\"\\d{2}:\\d{2}:\\d{2}\"");
+        Matcher matcher3 = pattern3.matcher(currentLine);
+        String timeCashOut = null;
+        while (matcher3.find()) {
+            int start = matcher3.start() + 6;
+            int end = matcher3.end() - 1;
+            timeCashOut = currentLine.substring(start, end);
         }
 
         if (scod != null) {
@@ -201,26 +236,26 @@ public class HelloController {
                 if (num != 0) {
                     if (num == 9 || num == 12 || num == 14) {
                         if (scodType.equals("Cash-in")) {
-                            addNew(String.valueOf(num), null, date, path, "1");
+                            addNew(String.valueOf(num), null, date, path, "1", timeCashIn);
                         } else if (scodType.equals("Cash-out")) {
-                            addNew(null, String.valueOf(num), date, path, "1");
+                            addNew(null, String.valueOf(num), date, path, "1", timeCashOut);
                         }
                     } else {
                         if (scodType.equals("Cash-in")) {
-                            addNew(String.valueOf(num), null, date, path, "2");
+                            addNew(String.valueOf(num), null, date, path, "2", timeCashIn);
                         } else if (scodType.equals("Cash-out")) {
-                            addNew(null, String.valueOf(num), date, path, "2");
+                            addNew(null, String.valueOf(num), date, path, "2", timeCashOut);
                         }
                     }
                 }
             } catch (NumberFormatException e) {
-                addNew(null, null, date, path, null);
+                addNew(null, null, null, path, null, null);
             }
         }
     }
 
-    private void addNew(String cashIn, String cashOut, String date, Path path, String group) {
-        scodOL.add(new Scod(scodIdCount, cashIn, cashOut, scodLineNumberCount, date, path, group));
+    private void addNew(String cashIn, String cashOut, String date, Path path, String group, String time) {
+        scodOL.add(new Scod(scodIdCount, cashIn, cashOut, scodLineNumberCount, date, path, group, time));
         scodIdCount++;
     }
 }
