@@ -153,6 +153,7 @@ public class LogFilesScanner {
 
         Pattern pattern1 = Pattern.compile("SCOD=.{2}");
         Matcher matcher1 = pattern1.matcher(currentLine);
+
         String scod = null;
         while (matcher1.find()) {
             int start = matcher1.start();
@@ -162,6 +163,7 @@ public class LogFilesScanner {
 
         Pattern pattern2 = Pattern.compile("time=\"\\d{2}:\\d{2}:\\d{2}\"");
         Matcher matcher2 = pattern2.matcher(previousLine);
+
         String timeCashIn = null;
         while (matcher2.find()) {
             int start = matcher2.start() + 6;
@@ -169,12 +171,10 @@ public class LogFilesScanner {
             timeCashIn = previousLine.substring(start, end);
         }
 
-        Pattern pattern3 = Pattern.compile("time=\"\\d{2}:\\d{2}:\\d{2}\"");
-        Matcher matcher3 = pattern3.matcher(currentLine);
         String timeCashOut = null;
-        while (matcher3.find()) {
-            int start = matcher3.start() + 6;
-            int end = matcher3.end() - 1;
+        while (matcher2.find()) {
+            int start = matcher2.start() + 6;
+            int end = matcher2.end() - 1;
             timeCashOut = currentLine.substring(start, end);
         }
 
