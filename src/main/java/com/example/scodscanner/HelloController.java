@@ -1,8 +1,8 @@
-package com.example.demofx;
+package com.example.scodscanner;
 
-import com.example.demofx.functionality.LogFileOpener;
-import com.example.demofx.functionality.LogFilesScanner;
-import com.example.demofx.objects.Scod;
+import com.example.scodscanner.functionality.LogFileOpener;
+import com.example.scodscanner.functionality.LogFilesScanner;
+import com.example.scodscanner.objects.Scod;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;

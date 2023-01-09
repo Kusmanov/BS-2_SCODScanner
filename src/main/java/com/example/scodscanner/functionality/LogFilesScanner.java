@@ -1,6 +1,6 @@
-package com.example.demofx.functionality;
+package com.example.scodscanner.functionality;
 
-import com.example.demofx.objects.Scod;
+import com.example.scodscanner.objects.Scod;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableCell;

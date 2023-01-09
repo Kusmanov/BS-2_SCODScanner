@@ -1,4 +1,4 @@
-package com.example.demofx;
+package com.example.scodscanner;
 
 public class App {
     public static void main(String[] args) {

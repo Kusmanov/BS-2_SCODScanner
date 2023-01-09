@@ -1,4 +1,4 @@
-package com.example.demofx;
+package com.example.scodscanner;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

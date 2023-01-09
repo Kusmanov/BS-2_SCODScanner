@@ -1,4 +1,4 @@
-package com.example.demofx.objects;
+package com.example.scodscanner.objects;
 
 import java.nio.file.Path;
 
