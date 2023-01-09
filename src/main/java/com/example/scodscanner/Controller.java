@@ -9,7 +9,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
-public class HelloController {
+public class Controller {
     @FXML
     private TableView<Scod> scodTable;
     @FXML

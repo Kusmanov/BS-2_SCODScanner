@@ -2,6 +2,6 @@ package com.example.scodscanner;
 
 public class App {
     public static void main(String[] args) {
-        HelloApplication.main(args);
+        Application.main(args);
     }
 }
