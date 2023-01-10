@@ -9,10 +9,10 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 public class ShowAboutInfo {
-    public static void execute() {
+    public static Stage execute() {
         //Create Stage
-        Stage newWindow = new Stage();
-        newWindow.setTitle("About");
+        Stage stage = new Stage();
+        stage.setTitle("About");
         //Create view in Java
         Label title = new Label("""
                 SCODScanner
@@ -24,9 +24,11 @@ public class ShowAboutInfo {
         //Style container
         container.setPadding(new Insets(50));
         container.setAlignment(Pos.CENTER);
-        //Set view in window
-        newWindow.setScene(new Scene(container));
+        //Set view in stage
+        stage.setScene(new Scene(container));
         //Launch
-        newWindow.show();
+        stage.show();
+
+        return stage;
     }
 }

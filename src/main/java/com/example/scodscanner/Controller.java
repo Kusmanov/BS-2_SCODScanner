@@ -6,9 +6,13 @@ import com.example.scodscanner.functionality.ShowAboutInfo;
 import com.example.scodscanner.objects.Scod;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.stage.Stage;
 
 public class Controller {
+    private static Stage aboutWindow;
     @FXML
     private TableView<Scod> scodTable;
     @FXML
@@ -43,6 +47,9 @@ public class Controller {
 
     @FXML
     private void onAboutMenuItemClick() {
-        ShowAboutInfo.execute();
+        if (aboutWindow != null) {
+            aboutWindow.close();
+        }
+        aboutWindow = ShowAboutInfo.execute();
     }
 }

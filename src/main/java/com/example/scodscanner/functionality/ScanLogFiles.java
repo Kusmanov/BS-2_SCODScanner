@@ -125,7 +125,10 @@ public class ScanLogFiles {
         return fileEx.toUpperCase().equals(ex);
     }
 
-    private static void addToObservableListNewScod(String scodType, Path path, String currentLine, String previousLine) {
+    private static void addToObservableListNewScod(String scodType,
+                                                   Path path,
+                                                   String currentLine,
+                                                   String previousLine) {
         String date;
         String scod = null;
         String timeCashIn = null;
