@@ -1,7 +1,7 @@
 package com.example.scodscanner;
 
-import com.example.scodscanner.functionality.LogFileOpener;
-import com.example.scodscanner.functionality.LogFilesScanner;
+import com.example.scodscanner.functionality.OpenLogFile;
+import com.example.scodscanner.functionality.ScanLogFiles;
 import com.example.scodscanner.functionality.ShowAboutInfo;
 import com.example.scodscanner.objects.Scod;
 import javafx.application.Platform;
@@ -28,12 +28,12 @@ public class Controller {
 
     @FXML
     private void onSelectMenuItemClick() {
-        LogFilesScanner.execute(idColumn, cashInColumn, cashOutColumn, dateColumn, groupColumn, timeColumn, scodTable);
+        ScanLogFiles.execute(idColumn, cashInColumn, cashOutColumn, dateColumn, groupColumn, timeColumn, scodTable);
     }
 
     @FXML
     private void onTableViewLineClick() {
-        LogFileOpener.execute(logFileListView, scodTable);
+        OpenLogFile.execute(logFileListView, scodTable);
     }
 
     @FXML

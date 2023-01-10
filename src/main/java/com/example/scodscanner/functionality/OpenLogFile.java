@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class LogFileOpener {
+public class OpenLogFile {
     public static void execute(ListView<String> logFileListView, TableView<Scod> scodTable) {
         TableView.TableViewSelectionModel<Scod> sm = scodTable.getSelectionModel();
         ObservableList<Scod> tableViewOL = sm.getSelectedItems();
