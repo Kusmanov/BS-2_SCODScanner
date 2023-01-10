@@ -2,12 +2,11 @@ package com.example.scodscanner;
 
 import com.example.scodscanner.functionality.LogFileOpener;
 import com.example.scodscanner.functionality.LogFilesScanner;
+import com.example.scodscanner.functionality.ShowAboutInfo;
 import com.example.scodscanner.objects.Scod;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 
 public class Controller {
     @FXML
@@ -28,7 +27,7 @@ public class Controller {
     private ListView<String> logFileListView;
 
     @FXML
-    private void onOpenMenuItemClick() {
+    private void onSelectMenuItemClick() {
         LogFilesScanner.execute(idColumn, cashInColumn, cashOutColumn, dateColumn, groupColumn, timeColumn, scodTable);
     }
 
@@ -40,5 +39,10 @@ public class Controller {
     @FXML
     private void onQuitMenuItemClick() {
         Platform.exit();
+    }
+
+    @FXML
+    private void onAboutMenuItemClick() {
+        ShowAboutInfo.execute();
     }
 }

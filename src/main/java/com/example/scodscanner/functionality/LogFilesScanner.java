@@ -24,6 +24,7 @@ public class LogFilesScanner {
     private static final ObservableList<Scod> scodOL = FXCollections.observableArrayList();
     private static int scodIdCount;
     private static int scodLineNumberCount;
+
     public static void execute(TableColumn<Scod, Integer> idColumn,
                                TableColumn<Scod, Integer> cashInColumn,
                                TableColumn<Scod, Integer> cashOutColumn,
@@ -43,12 +44,12 @@ public class LogFilesScanner {
             System.out.println("No Directory selected");
         } else {
             File dir = new File(selectedDirectory.getAbsolutePath());
-            // получаем все вложенные файлы в каталоге
+            // получаем каждый вложенный файл в каталоге
             for (File file : Objects.requireNonNull(dir.listFiles())) {
-                // проверяем расширение файлов
+                // проверяем расширение файла
                 if (isXml(file)) {
                     Path path = file.toPath();
-                    // читаем с потока данных
+                    // читаем файл с потока данных
                     try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
                         String currentLine;
                         String previousLine = null;
@@ -62,7 +63,7 @@ public class LogFilesScanner {
                             }
                             // увеличиваем счетчик номера строки
                             scodLineNumberCount++;
-                            // сохраняем строку перед выходом, чтобы использовать как предыдущую
+                            // сохраняем строку перед выходом, чтобы далее использовать как предыдущую
                             previousLine = currentLine;
                         }
                         // сбрасываем счетчик номера строки
@@ -95,13 +96,13 @@ public class LogFilesScanner {
                     setText("");
                     setStyle("");
                 } else {
-                    if (Objects.equals(item, "1")) {
+                    if (Objects.equals(item, "medium")) {
                         setText("medium");
                         setStyle("""
                                 -fx-background-color: #FFE1B3;
                                 -fx-border-color: #FFFFFF;
                                 """);
-                    } else if (Objects.equals(item, "2")) {
+                    } else if (Objects.equals(item, "high")) {
                         setText("high");
                         setStyle("""
                                 -fx-background-color: #FFB3B3;
@@ -114,26 +115,6 @@ public class LogFilesScanner {
                 }
             }
         });
-
-//        scodTable.setRowFactory((param) -> new TableRow<>() {
-//            protected void updateItem(Scod item, boolean empty) {
-//                super.updateItem(item, empty);
-//
-//                if (item == null || empty) {
-//                    setStyle("");
-//                } else {
-//                    if (Objects.equals(item.getGroup(), "1")) {
-//                        setStyle("-fx-background-color: #FFE1B3;");
-//                    } else if (Objects.equals(item.getGroup(), "2")) {
-//                        setStyle("-fx-background-color: #FFB3B3;");
-//                    } else if (item.) {
-//
-//                    } else {
-//                        setStyle("");
-//                    }
-//                }
-//            }
-//        });
     }
 
     private static boolean isXml(File file) {
@@ -145,59 +126,57 @@ public class LogFilesScanner {
     }
 
     private static void addToObservableListNewScod(String scodType, Path path, String currentLine, String previousLine) {
+        String date;
+        String scod = null;
+        String timeCashIn = null;
+        String timeCashOut = null;
+
         String fileName = path.getFileName().toString();
         String yyyy = fileName.substring(0, 4);
         String mm = fileName.substring(4, 6);
         String dd = fileName.substring(6, 8);
-        String date = yyyy + "-" + mm + "-" + dd;
+        date = yyyy + "-" + mm + "-" + dd;
 
-        Pattern pattern1 = Pattern.compile("SCOD=.{2}");
-        Matcher matcher1 = pattern1.matcher(currentLine);
+        Pattern scodPattern = Pattern.compile("SCOD=.{2}");
 
-        String scod = null;
-        while (matcher1.find()) {
+        Matcher matcher1 = scodPattern.matcher(currentLine);
+        if (matcher1.find()) {
             int start = matcher1.start();
             int end = matcher1.end();
             scod = currentLine.substring(start, end);
         }
 
-        Pattern pattern2 = Pattern.compile("time=\"\\d{2}:\\d{2}:\\d{2}\"");
-        Matcher matcher2 = pattern2.matcher(previousLine);
+        Pattern timePattern = Pattern.compile("time=\"\\d{2}:\\d{2}:\\d{2}\"");
 
-        String timeCashIn = null;
-        while (matcher2.find()) {
+        Matcher matcher2 = timePattern.matcher(previousLine);
+        if (matcher2.find()) {
             int start = matcher2.start() + 6;
             int end = matcher2.end() - 1;
             timeCashIn = previousLine.substring(start, end);
         }
 
-        String timeCashOut = null;
-        while (matcher2.find()) {
-            int start = matcher2.start() + 6;
-            int end = matcher2.end() - 1;
+        Matcher matcher3 = timePattern.matcher(currentLine);
+        if (matcher3.find()) {
+            int start = matcher3.start() + 6;
+            int end = matcher3.end() - 1;
             timeCashOut = currentLine.substring(start, end);
         }
 
         if (scod != null) {
-            try {
-                int num = Integer.parseInt(scod.substring(5));
-                if (num != 0) {
-                    if (num == 9 || num == 12 || num == 14) {
-                        if (scodType.equals("Cash-in")) {
-                            addNew(String.valueOf(num), null, date, path, "1", timeCashIn);
-                        } else if (scodType.equals("Cash-out")) {
-                            addNew(null, String.valueOf(num), date, path, "1", timeCashOut);
-                        }
-                    } else {
-                        if (scodType.equals("Cash-in")) {
-                            addNew(String.valueOf(num), null, date, path, "2", timeCashIn);
-                        } else if (scodType.equals("Cash-out")) {
-                            addNew(null, String.valueOf(num), date, path, "2", timeCashOut);
-                        }
+            if (!scod.equals("SCOD=00")) {
+                if (scod.equals("SCOD=09") || scod.equals("SCOD=12") || scod.equals("SCOD=14")) {
+                    if (scodType.equals("Cash-in")) {
+                        addNew(scod, null, date, path, "medium", timeCashIn);
+                    } else if (scodType.equals("Cash-out")) {
+                        addNew(null, scod, date, path, "medium", timeCashOut);
+                    }
+                } else {
+                    if (scodType.equals("Cash-in")) {
+                        addNew(scod, null, date, path, "high", timeCashIn);
+                    } else if (scodType.equals("Cash-out")) {
+                        addNew(null, scod, date, path, "high", timeCashOut);
                     }
                 }
-            } catch (NumberFormatException e) {
-                addNew(null, null, null, path, null, null);
             }
         }
     }
