@@ -126,51 +126,11 @@ public class ScanLogFiles {
     }
 
     private static void addToObservableListNewScod(String type, Path path, String currentLine, String previousLine) {
-        String date;
-        String scod = null;
-        String ecod = null;
-        String timeCashIn = null;
-        String timeCashOut = null;
-
-        String fileName = path.getFileName().toString();
-        String yyyy = fileName.substring(0, 4);
-        String mm = fileName.substring(4, 6);
-        String dd = fileName.substring(6, 8);
-        date = yyyy + "-" + mm + "-" + dd;
-
-        Pattern scodPattern = Pattern.compile("SCOD=.{2}");
-
-        Matcher scodMatcher = scodPattern.matcher(currentLine);
-        if (scodMatcher.find()) {
-            int start = scodMatcher.start();
-            int end = scodMatcher.end();
-            scod = currentLine.substring(start, end);
-        }
-
-        Pattern timePattern = Pattern.compile("time=\"\\d{2}:\\d{2}:\\d{2}\"");
-
-        Matcher prevTimeMatcher = timePattern.matcher(previousLine);
-        if (prevTimeMatcher.find()) {
-            int start = prevTimeMatcher.start() + 6;
-            int end = prevTimeMatcher.end() - 1;
-            timeCashIn = previousLine.substring(start, end);
-        }
-
-        Matcher curTimeMatcher = timePattern.matcher(currentLine);
-        if (curTimeMatcher.find()) {
-            int start = curTimeMatcher.start() + 6;
-            int end = curTimeMatcher.end() - 1;
-            timeCashOut = currentLine.substring(start, end);
-        }
-
-        Pattern ecodPattern = Pattern.compile("ECOD=.{4}");
-
-        Matcher ecodMatcher = ecodPattern.matcher(currentLine);
-        if (ecodMatcher.find()) {
-            int start = ecodMatcher.start();
-            int end = ecodMatcher.end();
-            ecod = currentLine.substring(start, end);
-        }
+        String date = getDate(path);
+        String scod = getFoundMatch("SCOD=.{2}", currentLine);
+        String ecod = getFoundMatch("SCOD=.{4}", currentLine);
+        String timeCashIn = getFoundMatch("\\d{2}:\\d{2}:\\d{2}", previousLine);
+        String timeCashOut = getFoundMatch("\\d{2}:\\d{2}:\\d{2}", currentLine);
 
         if (scod != null) {
             if (!scod.equals("SCOD=00")) {
@@ -190,5 +150,24 @@ public class ScanLogFiles {
             scodOL.add(new Scod(scodIdCount, null, scod, scodLineNumberCount, date, path, group, timeCashOut, null));
         }
         scodIdCount++;
+    }
+
+    private static String getFoundMatch(String ptn, String line) {
+        Pattern pattern = Pattern.compile(ptn);
+        Matcher matcher = pattern.matcher(line);
+        if (matcher.find()) {
+            int start = matcher.start();
+            int end = matcher.end();
+            return line.substring(start, end);
+        }
+        return null;
+    }
+
+    private static String getDate(Path path) {
+        String fileName = path.getFileName().toString();
+        String yyyy = fileName.substring(0, 4);
+        String mm = fileName.substring(4, 6);
+        String dd = fileName.substring(6, 8);
+        return yyyy + "-" + mm + "-" + dd;
     }
 }

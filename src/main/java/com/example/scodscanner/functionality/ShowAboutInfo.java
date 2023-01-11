@@ -19,8 +19,9 @@ public class ShowAboutInfo {
                 Version: 1 (2023-01-09)
                 Company: BS/2 Kazakhstan
                 
-                Для описания ошибок использовалось
-                Android приложение "Error Code ATM" (2023-01-10)""");
+                Описания ошибок взяты
+                из Android приложения
+                "Error Code ATM" (2023-01-10)""");
         VBox container = new VBox(title);
         //Style title
         title.setTextAlignment(TextAlignment.CENTER);
