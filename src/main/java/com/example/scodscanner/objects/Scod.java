@@ -11,8 +11,9 @@ public class Scod {
     private final Path file;
     private final String group;
     private final String time;
+    private final String ecod;
 
-    public Scod(int id, String cashIn, String cashOut, int line, String date, Path file, String group, String time) {
+    public Scod(int id, String cashIn, String cashOut, int line, String date, Path file, String group, String time, String ecod) {
         this.id = id;
         this.cashIn = cashIn;
         this.cashOut = cashOut;
@@ -21,6 +22,7 @@ public class Scod {
         this.file = file;
         this.group = group;
         this.time = time;
+        this.ecod = ecod;
     }
 
     public int getId() {
@@ -53,5 +55,9 @@ public class Scod {
 
     public String getTime() {
         return time;
+    }
+
+    public String getEcod() {
+        return ecod;
     }
 }

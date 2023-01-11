@@ -125,12 +125,10 @@ public class ScanLogFiles {
         return fileEx.toUpperCase().equals(ex);
     }
 
-    private static void addToObservableListNewScod(String scodType,
-                                                   Path path,
-                                                   String currentLine,
-                                                   String previousLine) {
+    private static void addToObservableListNewScod(String type, Path path, String currentLine, String previousLine) {
         String date;
         String scod = null;
+        String ecod = null;
         String timeCashIn = null;
         String timeCashOut = null;
 
@@ -142,50 +140,55 @@ public class ScanLogFiles {
 
         Pattern scodPattern = Pattern.compile("SCOD=.{2}");
 
-        Matcher matcher1 = scodPattern.matcher(currentLine);
-        if (matcher1.find()) {
-            int start = matcher1.start();
-            int end = matcher1.end();
+        Matcher scodMatcher = scodPattern.matcher(currentLine);
+        if (scodMatcher.find()) {
+            int start = scodMatcher.start();
+            int end = scodMatcher.end();
             scod = currentLine.substring(start, end);
         }
 
         Pattern timePattern = Pattern.compile("time=\"\\d{2}:\\d{2}:\\d{2}\"");
 
-        Matcher matcher2 = timePattern.matcher(previousLine);
-        if (matcher2.find()) {
-            int start = matcher2.start() + 6;
-            int end = matcher2.end() - 1;
+        Matcher prevTimeMatcher = timePattern.matcher(previousLine);
+        if (prevTimeMatcher.find()) {
+            int start = prevTimeMatcher.start() + 6;
+            int end = prevTimeMatcher.end() - 1;
             timeCashIn = previousLine.substring(start, end);
         }
 
-        Matcher matcher3 = timePattern.matcher(currentLine);
-        if (matcher3.find()) {
-            int start = matcher3.start() + 6;
-            int end = matcher3.end() - 1;
+        Matcher curTimeMatcher = timePattern.matcher(currentLine);
+        if (curTimeMatcher.find()) {
+            int start = curTimeMatcher.start() + 6;
+            int end = curTimeMatcher.end() - 1;
             timeCashOut = currentLine.substring(start, end);
+        }
+
+        Pattern ecodPattern = Pattern.compile("ECOD=.{4}");
+
+        Matcher ecodMatcher = ecodPattern.matcher(currentLine);
+        if (ecodMatcher.find()) {
+            int start = ecodMatcher.start();
+            int end = ecodMatcher.end();
+            ecod = currentLine.substring(start, end);
         }
 
         if (scod != null) {
             if (!scod.equals("SCOD=00")) {
                 if (scod.equals("SCOD=09") || scod.equals("SCOD=12") || scod.equals("SCOD=14")) {
-                    if (scodType.equals("Cash-in")) {
-                        addNew(scod, null, date, path, "medium", timeCashIn);
-                    } else if (scodType.equals("Cash-out")) {
-                        addNew(null, scod, date, path, "medium", timeCashOut);
-                    }
+                    addNew(scod, date, path, "medium", timeCashIn, timeCashOut, ecod, type);
                 } else {
-                    if (scodType.equals("Cash-in")) {
-                        addNew(scod, null, date, path, "high", timeCashIn);
-                    } else if (scodType.equals("Cash-out")) {
-                        addNew(null, scod, date, path, "high", timeCashOut);
-                    }
+                    addNew(scod, date, path, "high", timeCashIn, timeCashOut, ecod, type);
                 }
             }
         }
     }
 
-    private static void addNew(String cashIn, String cashOut, String date, Path path, String group, String time) {
-        scodOL.add(new Scod(scodIdCount, cashIn, cashOut, scodLineNumberCount, date, path, group, time));
+    private static void addNew(String scod, String date, Path path, String group, String timeCashIn, String timeCashOut, String ecod, String type) {
+        if (type.equals("Cash-in")) {
+            scodOL.add(new Scod(scodIdCount, scod, null, scodLineNumberCount, date, path, group, timeCashIn, ecod));
+        } else if (type.equals("Cash-out")) {
+            scodOL.add(new Scod(scodIdCount, null, scod, scodLineNumberCount, date, path, group, timeCashOut, null));
+        }
         scodIdCount++;
     }
 }
