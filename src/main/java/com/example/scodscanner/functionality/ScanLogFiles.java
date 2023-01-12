@@ -69,7 +69,7 @@ public class ScanLogFiles {
                         // сбрасываем счетчик номера строки
                         scodLineNumberCount = 0;
                     } catch (IOException e) {
-                        System.out.println("Handle file I/O exception");
+                        e.printStackTrace();
                     }
                 }
             }
@@ -135,15 +135,15 @@ public class ScanLogFiles {
         if (scod != null) {
             if (!scod.equals("SCOD=00")) {
                 if (scod.equals("SCOD=09") || scod.equals("SCOD=12") || scod.equals("SCOD=14")) {
-                    addNew(scod, date, path, "medium", timeCashIn, timeCashOut, ecod, type);
+                    add(scod, date, path, "medium", timeCashIn, timeCashOut, ecod, type);
                 } else {
-                    addNew(scod, date, path, "high", timeCashIn, timeCashOut, ecod, type);
+                    add(scod, date, path, "high", timeCashIn, timeCashOut, ecod, type);
                 }
             }
         }
     }
 
-    private static void addNew(String scod, String date, Path path, String group, String timeCashIn, String timeCashOut, String ecod, String type) {
+    private static void add(String scod, String date, Path path, String group, String timeCashIn, String timeCashOut, String ecod, String type) {
         if (type.equals("Cash-in")) {
             scodOL.add(new Scod(scodIdCount, scod, null, scodLineNumberCount, date, path, group, timeCashIn, ecod));
         } else if (type.equals("Cash-out")) {
