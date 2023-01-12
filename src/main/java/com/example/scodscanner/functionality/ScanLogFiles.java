@@ -40,9 +40,7 @@ public class ScanLogFiles {
         File selectedDirectory = directoryChooser.showDialog(new Stage());
 
         // проверяем на наличие выбранной директории
-        if (selectedDirectory == null) {
-            System.out.println("No Directory selected");
-        } else {
+        if (selectedDirectory != null) {
             File dir = new File(selectedDirectory.getAbsolutePath());
             // получаем каждый вложенный файл в каталоге
             for (File file : Objects.requireNonNull(dir.listFiles())) {
